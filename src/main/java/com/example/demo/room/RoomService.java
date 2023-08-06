@@ -25,10 +25,6 @@ public class RoomService {
         return repository.findAll();
     }
 
-    public RoomEntity getRoom(long id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room not exist with id: " + id));
-    }
-
     public RoomEntity getRoom(String name) {
         return repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Room not exist with name: " + name));
     }
@@ -53,5 +49,14 @@ public class RoomService {
         RoomEntity room = repository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not exist with id: " + roomId));
         repository.delete(room);
 
+    }
+
+    public void updateRoom(String roomName, RoomEntity updateRoom) {
+        RoomEntity newRoom = repository.findByName(roomName).orElseThrow(() -> new ResourceNotFoundException("Room not exist with name: " + roomName));
+
+        newRoom.setName(updateRoom.getName());
+        newRoom.setWindowExposure(updateRoom.getWindowExposure());
+
+        repository.save(newRoom);
     }
 }

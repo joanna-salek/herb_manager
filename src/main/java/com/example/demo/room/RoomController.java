@@ -20,11 +20,6 @@ public class RoomController {
         return service.getAllRooms();
     }
 
-    @GetMapping("/rooms/{id}")
-    public RoomEntity getRoomById(@PathVariable long id) {
-        return service.getRoom(id);
-    }
-
     @GetMapping("/rooms/{name}")
     public RoomEntity getRoomByName(@PathVariable String name) {
         return service.getRoom(name);
@@ -35,16 +30,19 @@ public class RoomController {
         service.addRoom(newRoom);
     }
 
-    @DeleteMapping("/rooms/{name}")
-    public void deleteRoom(@PathVariable String roomName) {
-        service.deleteRoom(roomName);
-    }
-
-    @PostMapping("rooms/{roomName}/herbs/{herbName}")
+    @PutMapping("rooms/{roomName}/herbs/{herbName}")
     public void postHerbInRoom(@PathVariable String roomName, @PathVariable String herbName){
         service.addHerbToRoom(roomName, herbName);
     }
 
+    @PutMapping("rooms/{roomName}")
+    public void putRoom(@PathVariable String roomName, @RequestBody RoomEntity updateRoom){
+        service.updateRoom(roomName, updateRoom);
+    }
 
+    @DeleteMapping("/rooms/{name}")
+    public void deleteRoom(@PathVariable String roomName) {
+        service.deleteRoom(roomName);
+    }
 
 }

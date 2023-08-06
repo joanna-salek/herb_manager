@@ -17,13 +17,9 @@ public class HerbService {
         this.repository = repository;
     }
 
-    public List<HerbEntity> getHebrs() {
+    public List<HerbEntity> getHerbs() {
         return repository.findAll();
     }
-
-//    public HerbEntity getHerb(long id) {
-//        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with id: " + id));
-//    }
 
     public HerbEntity getHerb(String name) {
         return repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with name: " + name));
@@ -33,20 +29,16 @@ public class HerbService {
         repository.save(newHerb);
     }
 
-    public void updateHerb(long id, HerbEntity newHerb) {
-        HerbEntity updateHerb = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with id: " + id));
+    public void updateHerb(String name, HerbEntity updateHerb) {
+        HerbEntity newHerb = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with name: " + name));
 
-        updateHerb.setName(newHerb.getName());
-        updateHerb.setSunExposition(newHerb.getSunExposition());
-        updateHerb.setWateringFrequency(newHerb.getWateringFrequency());
+        newHerb.setName(updateHerb.getName());
+        newHerb.setSunExposition(updateHerb.getSunExposition());
+        newHerb.setWateringFrequency(updateHerb.getWateringFrequency());
 
-        repository.save(updateHerb);
+        repository.save(newHerb);
     }
 
-    public void deleteHerb(long id) {
-        HerbEntity herb = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with id: " + id));
-        repository.delete(herb);
-    }
     public void deleteHerb(String name) {
         HerbEntity herb = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with name: " + name));
         repository.delete(herb);

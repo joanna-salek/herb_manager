@@ -22,9 +22,7 @@ public class HerbEntity {
         this.wateringFrequency = wateringFrequency;
     }
 
-    public HerbEntity(){
-
-    }
+    public HerbEntity(){}
 
     public Long getId() {
         return id;

@@ -17,13 +17,8 @@ public class HerbController {
 
     @GetMapping("/herbs")
     public List<HerbEntity> getHerbs() {
-        return service.getHebrs();
+        return service.getHerbs();
     }
-
-//    @GetMapping("/herbs/{id}")
-//    public HerbEntity getHerbById(@PathVariable long id) {
-//        return service.getHerb(id);
-//    }
 
     @GetMapping("/herbs/{name}")
     public HerbEntity getHerbByName(@PathVariable String name) {
@@ -35,15 +30,10 @@ public class HerbController {
         service.addHerb(newHerb);
     }
 
-    @PutMapping("/herbs/{id}")
-    public void putHerb(@PathVariable long id, @RequestBody HerbEntity newHerb) {
-        service.updateHerb(id, newHerb);
+    @PutMapping("/herbs/{name}")
+    public void putHerb(@PathVariable String name, @RequestBody HerbEntity updateHerb) {
+        service.updateHerb(name, updateHerb);
     }
-    @DeleteMapping("/herbs/{id}")
-    public void deleteHerb(@PathVariable long id) {
-        service.deleteHerb(id);
-    }
-
     @DeleteMapping("/herbs/{name}")
     public void deleteHerb(@PathVariable String name) {
         service.deleteHerb(name);
