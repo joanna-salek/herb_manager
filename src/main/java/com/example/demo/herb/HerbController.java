@@ -8,7 +8,6 @@ import java.util.List;
 @Component
 @RestController
 public class HerbController {
-
     private final HerbService service;
 
     public HerbController(HerbService service) {
@@ -16,8 +15,9 @@ public class HerbController {
     }
 
     @GetMapping("/herbs")
-    public List<HerbEntity> getHerbs() {
-        return service.getHerbs();
+    public List<HerbEntity> getHerbs(@RequestParam(required = false) Integer page) {
+        Integer pageNum = page != null && page > 0 ? page : 0;
+        return service.getHerbs(pageNum);
     }
 
     @GetMapping("/herbs/{name}")
@@ -26,14 +26,15 @@ public class HerbController {
     }
 
     @PostMapping("/herbs")
-    public void postHerb(@RequestBody HerbEntity newHerb) {
-        service.addHerb(newHerb);
+    public HerbEntity postHerb(@RequestBody HerbEntity newHerb) {
+        return service.addHerb(newHerb);
     }
 
     @PutMapping("/herbs/{name}")
-    public void putHerb(@PathVariable String name, @RequestBody HerbEntity updateHerb) {
-        service.updateHerb(name, updateHerb);
+    public HerbEntity putHerb(@PathVariable String name, @RequestBody HerbEntity updateHerb) {
+        return service.updateHerb(name, updateHerb);
     }
+
     @DeleteMapping("/herbs/{name}")
     public void deleteHerb(@PathVariable String name) {
         service.deleteHerb(name);

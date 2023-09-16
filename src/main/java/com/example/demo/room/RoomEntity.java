@@ -3,9 +3,17 @@ package com.example.demo.room;
 import com.example.demo.herb.HerbEntity;
 import com.example.demo.util.WindowExposure;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.*;
 
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(name = "room")
 public class RoomEntity {
@@ -28,60 +36,17 @@ public class RoomEntity {
         this.windowExposure = windowExposure;
         this.herbEntitySet = new HashSet<>();
     }
-    public RoomEntity(){
 
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public RoomEntity(long id, String name, WindowExposure windowExposure) {
         this.name = name;
-    }
-
-    public WindowExposure getWindowExposure() {
-        return windowExposure;
-    }
-
-    public void setWindowExposure(WindowExposure windowExposure) {
         this.windowExposure = windowExposure;
+        this.herbEntitySet = new HashSet<>();
+    }
+    public RoomEntity(){
     }
 
-    public Set<HerbEntity> getHerbEntitySet() {
-        return herbEntitySet;
+    public boolean addHerb(HerbEntity herb){
+        return herbEntitySet.add(herb);
     }
 
-    public void setHerbEntitySet(Set<HerbEntity> herbEntitySet) {
-        this.herbEntitySet = herbEntitySet;
-    }
-
-    public void addHerb(HerbEntity herb){
-        herbEntitySet.add(herb);
-    }
-
-    public void addHerbs(List<HerbEntity> herbs){
-        herbs.forEach(this::addHerb);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RoomEntity that = (RoomEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && windowExposure == that.windowExposure && Objects.equals(herbEntitySet, that.herbEntitySet);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, windowExposure, herbEntitySet);
-    }
 }

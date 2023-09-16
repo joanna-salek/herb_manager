@@ -1,15 +1,16 @@
 package com.example.demo.herb;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class HerbService {
 
+    private static final int PAGE_SIZE = 20;
     HerbRepository repository;
 
     @Autowired
@@ -17,30 +18,30 @@ public class HerbService {
         this.repository = repository;
     }
 
-    public List<HerbEntity> getHerbs() {
-        return repository.findAll();
+    public List<HerbEntity> getHerbs(Integer page) {
+        return repository.findAll(PageRequest.of(page, PAGE_SIZE)).toList();
     }
 
     public HerbEntity getHerb(String name) {
-        return repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with name: " + name));
+        return repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb don't exist with name: " + name));
     }
 
-    public void addHerb(HerbEntity newHerb) {
-        repository.save(newHerb);
+    public HerbEntity addHerb(HerbEntity newHerb) {
+        return repository.save(newHerb);
     }
 
-    public void updateHerb(String name, HerbEntity updateHerb) {
-        HerbEntity newHerb = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with name: " + name));
+    public HerbEntity updateHerb(String name, HerbEntity newHerb) {
+        HerbEntity oldHerb = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb don't exist with name: " + name));
 
-        newHerb.setName(updateHerb.getName());
-        newHerb.setSunExposition(updateHerb.getSunExposition());
-        newHerb.setWateringFrequency(updateHerb.getWateringFrequency());
+        oldHerb.setName(newHerb.getName());
+        oldHerb.setSunExposition(newHerb.getSunExposition());
+        oldHerb.setWateringFrequency(newHerb.getWateringFrequency());
 
-        repository.save(newHerb);
+        return repository.save(oldHerb);
     }
 
     public void deleteHerb(String name) {
-        HerbEntity herb = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb not exist with name: " + name));
+        HerbEntity herb = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Herb don't exist with name: " + name));
         repository.delete(herb);
     }
 

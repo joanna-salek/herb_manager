@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.room.RoomDtoMapper.mapToRoomDtos;
+
 @Component
 @RestController
 public class RoomController {
@@ -16,28 +18,35 @@ public class RoomController {
     }
 
     @GetMapping("/rooms")
-    public List<RoomEntity> getAllRooms() {
-        return service.getAllRooms();
+    public List<RoomDto> getRooms(@RequestParam(required = false) Integer page) {
+        Integer pageNum = page != null && page > 0 ? page : 0;
+        return mapToRoomDtos(service.getAllRooms(pageNum));
+    }
+
+    @GetMapping("/rooms/herbs")
+    public List<RoomEntity> getRoomsWithHerbs(@RequestParam(required = false) Integer page) {
+        Integer pageNum = page != null && page > 0 ? page : 0;
+        return service.getAllRoomsWithHerbs(pageNum);
     }
 
     @GetMapping("/rooms/{name}")
     public RoomEntity getRoomByName(@PathVariable String name) {
-        return service.getRoom(name);
+        return service.getSingleRoom(name);
     }
 
     @PostMapping("/rooms")
-    public void postRoom(@RequestBody RoomEntity newRoom) {
-        service.addRoom(newRoom);
+    public RoomEntity postRoom(@RequestBody RoomEntity newRoom) {
+        return service.addRoom(newRoom);
     }
 
     @PutMapping("rooms/{roomName}/herbs/{herbName}")
-    public void postHerbInRoom(@PathVariable String roomName, @PathVariable String herbName){
-        service.addHerbToRoom(roomName, herbName);
+    public RoomEntity postHerbInRoom(@PathVariable String roomName, @PathVariable String herbName){
+        return service.addHerbToRoom(roomName, herbName);
     }
 
     @PutMapping("rooms/{roomName}")
-    public void putRoom(@PathVariable String roomName, @RequestBody RoomEntity updateRoom){
-        service.updateRoom(roomName, updateRoom);
+    public RoomEntity putRoom(@PathVariable String roomName, @RequestBody RoomEntity newRoom){
+        return service.updateRoom(roomName, newRoom);
     }
 
     @DeleteMapping("/rooms/{name}")

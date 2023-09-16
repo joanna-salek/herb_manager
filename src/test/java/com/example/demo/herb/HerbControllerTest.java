@@ -4,11 +4,15 @@ import com.example.demo.util.SunExposition;
 import com.example.demo.util.WateringFrequency;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class HerbControllerTest {
     @MockBean
     private HerbRepository repository;
@@ -37,7 +42,7 @@ class HerbControllerTest {
      */
     @Test
     public void getHerbs() throws Exception {
-        when(repository.findAll()).thenReturn(Lists.newArrayList(cactusEntity, basilEntity));
+        when(repository.findAll(PageRequest.of(0, 20))).thenReturn(new PageImpl<>(Lists.newArrayList(cactusEntity, basilEntity), PageRequest.of(0, 20),2));
         mvc.perform(MockMvcRequestBuilders.get("/herbs").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -57,7 +62,6 @@ class HerbControllerTest {
     @Test
     public void getHerbByName() throws Exception {
         when(repository.findByName(cactusEntity.getName())).thenReturn(Optional.of(cactusEntity));
-
         mvc.perform(MockMvcRequestBuilders.get("/herbs/Cactus").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Cactus"))
@@ -85,7 +89,6 @@ class HerbControllerTest {
     @Test
     public void putHerb() throws Exception {
         when(repository.findByName(cactusEntity.getName())).thenReturn(Optional.of(cactusEntity));
-
         mvc.perform(MockMvcRequestBuilders.put("/herbs/Cactus")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(basilEntity)))
@@ -100,7 +103,6 @@ class HerbControllerTest {
     @Test
     public void deleteHerb() throws Exception {
         when(repository.findByName(cactusEntity.getName())).thenReturn(Optional.of(cactusEntity));
-
         mvc.perform(MockMvcRequestBuilders.delete("/herbs/{name}", cactusEntity.getName())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

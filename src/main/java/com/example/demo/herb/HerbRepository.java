@@ -5,5 +5,4 @@ import java.util.Optional;
 
 public interface HerbRepository extends JpaRepository<HerbEntity, Long> {
     Optional<HerbEntity> findByName(String name);
-
 }
