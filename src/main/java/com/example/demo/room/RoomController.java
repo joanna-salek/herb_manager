@@ -29,9 +29,9 @@ public class RoomController {
         return service.getAllRoomsWithHerbs(pageNum);
     }
 
-    @GetMapping("/rooms/{name}")
-    public RoomEntity getRoomByName(@PathVariable String name) {
-        return service.getSingleRoom(name);
+    @GetMapping("/rooms/{roomId}")
+    public RoomEntity getRoom(@PathVariable Long roomId) {
+        return service.getRoom(roomId);
     }
 
     @PostMapping("/rooms")
@@ -39,19 +39,19 @@ public class RoomController {
         return service.addRoom(newRoom);
     }
 
-    @PutMapping("rooms/{roomName}/herbs/{herbName}")
-    public RoomEntity postHerbInRoom(@PathVariable String roomName, @PathVariable String herbName){
-        return service.addHerbToRoom(roomName, herbName);
+    @PutMapping("rooms/{roomId}/herbs/{herbName}")
+    public RoomEntity postHerbInRoom(@PathVariable Long roomId, @PathVariable String herbName){
+        return service.addHerbToRoom(roomId, herbName);
     }
 
-    @PutMapping("rooms/{roomName}")
-    public RoomEntity putRoom(@PathVariable String roomName, @RequestBody RoomEntity newRoom){
-        return service.updateRoom(roomName, newRoom);
+    @PutMapping("rooms/{roomId}")
+    public RoomEntity putRoom(@PathVariable Long roomId, @RequestBody RoomEntity newRoom){
+        return service.updateRoom(roomId, newRoom);
     }
 
     @DeleteMapping("/rooms/{name}")
-    public void deleteRoom(@PathVariable String roomName) {
-        service.deleteRoom(roomName);
+    public void deleteRoom(@PathVariable Long roomId) {
+        service.deleteRoom(roomId);
     }
 
 }

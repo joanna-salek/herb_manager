@@ -21,7 +21,7 @@ public class RoomEntity {
     private @Id
     @GeneratedValue
     Long id;
-    @Column(unique=true, nullable=false)
+    @Column(nullable=false)
     private String name;
     private WindowExposure windowExposure;
 

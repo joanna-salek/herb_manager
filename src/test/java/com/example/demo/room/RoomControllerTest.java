@@ -64,15 +64,15 @@ class RoomControllerTest {
     }
 
     /*
-        Test GET "/rooms/{name}"
-          - Mock JpaRepository findByName(String name) to return example room entity
+        Test GET "/rooms/{id}"
+          - Mock JpaRepository findById(Long id) to return example room entity
           - Validate Json GET response with expected room
     */
     @Test
-    public void getRoomByName() throws Exception {
-        when(repository.findByName(kitchenEntity.getName())).thenReturn(Optional.of(kitchenEntity));
+    public void getRoomById() throws Exception {
+        when(repository.findById(1L)).thenReturn(Optional.of(kitchenEntity));
 
-        mvc.perform(MockMvcRequestBuilders.get("/rooms/Kitchen").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.get("/rooms/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Kitchen"))
                 .andExpect(jsonPath("$.windowExposure").value(WindowExposure.SOUTH.name()));}
@@ -90,46 +90,46 @@ class RoomControllerTest {
     }
 
     /*
-      Test PUT "/rooms/{roomName}/herbs/{herbName}"
-         - Mock JpaRepository findByName(String name) to return example room entity
-         - Validate Status OK when request PUT "/rooms/{roomName}/herbs/{herbName}"
+      Test PUT "/rooms/{roomId}/herbs/{herbName}"
+         - Mock JpaRepository findById(Long id) to return example room entity
+         - Validate Status OK when request PUT "/rooms/1/herbs/{herbName}"
    */
     @Test
     public void putHerbInRoom() throws Exception {
         HerbEntity basilEntity = new HerbEntity("Basil", SunExposition.PARTIAL_SHADOW, WateringFrequency.ONCE_PER_MONTH);
-        when(repository.findByName(kitchenEntity.getName())).thenReturn(Optional.of(kitchenEntity));
+        when(repository.findById(1L)).thenReturn(Optional.of(kitchenEntity));
         when(herbService.getHerb("Basil")).thenReturn(basilEntity);
 
-        mvc.perform(MockMvcRequestBuilders.put("/rooms/Kitchen/herbs/Basil")
+        mvc.perform(MockMvcRequestBuilders.put("/rooms/1/herbs/Basil")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     /*
-       Test PUT "/rooms/{roomName}"
-         - Mock JpaRepository findByName(String name) to return example room entity
-         - Validate Status OK when request PUT "/rooms/Kitchen" with json entity of example room "Kitchen"
+       Test PUT "/rooms/{roomId}"
+         - Mock JpaRepository findById(Long id) to return example room entity
+         - Validate Status OK when request PUT "/rooms/1" with json entity of example room "Kitchen"
     */
     @Test
     public void putHerb() throws Exception {
-        when(repository.findByName(kitchenEntity.getName())).thenReturn(Optional.of(kitchenEntity));
+        when(repository.findById(1L)).thenReturn(Optional.of(kitchenEntity));
 
-        mvc.perform(MockMvcRequestBuilders.put("/herbs/Kitchen")
+        mvc.perform(MockMvcRequestBuilders.put("/herbs/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(bedroomEntity)))
                 .andExpect(status().isOk());
     }
 
     /*
-      Test DELETE "/rooms/{name}"
-        - Mock JpaRepository findByName(String name) to return example "Kitchen" room entity
-        - Validate Status OK when request DELETE "/rooms/Kitchen"
+      Test DELETE "/rooms/{id}"
+        - Mock JpaRepository findById(Long id) to return example "Kitchen" room entity
+        - Validate Status OK when request DELETE "/rooms/1"
    */
     @Test
     public void deleteRoom() throws Exception {
-        when(repository.findByName(kitchenEntity.getName())).thenReturn(Optional.of(kitchenEntity));
+        when(repository.findById(1L)).thenReturn(Optional.of(kitchenEntity));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/herbs/{name}", kitchenEntity.getName())
+        mvc.perform(MockMvcRequestBuilders.delete("/herbs/1", kitchenEntity.getName())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

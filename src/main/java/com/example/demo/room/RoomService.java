@@ -28,32 +28,32 @@ public class RoomService {
         return repository.findAllRoomsWithHerbs(PageRequest.of(page, PAGE_SIZE));
     }
 
-    public RoomEntity getSingleRoom(String name) {
-        return repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with name: " + name));
+    public RoomEntity getRoom(Long roomId) {
+        return repository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with id: " + roomId));
     }
 
     public RoomEntity addRoom(RoomEntity newRoom) {
         return repository.save(newRoom);
     }
 
-    public RoomEntity addHerbToRoom(String roomName, String herbName) {
-        RoomEntity room = repository.findByName(roomName).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with name: " + roomName));
+    public RoomEntity addHerbToRoom(Long roomId, String herbName) {
+        RoomEntity room = repository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with id: " + roomId));
         if (room.addHerb(herbService.getHerb(herbName))){
             return repository.save(room);
         }else{
-            throw new IllegalArgumentException("Herb with name: " + herbName +  "already present in room " + roomName);
+            throw new IllegalArgumentException("Herb with name: " + herbName +  "already present in room with id " + roomId);
         }
     }
 
-    public RoomEntity updateRoom(String roomName, RoomEntity newRoom) {
-        RoomEntity oldRoom = repository.findByName(roomName).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with name: " + roomName));
+    public RoomEntity updateRoom(Long roomId, RoomEntity newRoom) {
+        RoomEntity oldRoom = repository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with id: " + roomId));
         oldRoom.setName(newRoom.getName());
         oldRoom.setWindowExposure(newRoom.getWindowExposure());
         return repository.save(oldRoom);
     }
 
-    public void deleteRoom(String roomName) {
-        RoomEntity room = repository.findByName(roomName).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with name: " + roomName));
+    public void deleteRoom(Long roomId) {
+        RoomEntity room = repository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room don't exist with name id : " + roomId));
         repository.delete(room);
     }
 }
